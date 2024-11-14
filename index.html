@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Calendar</title>
+    <style>
+         #hlo{
+            border-radius:70px;
+            height:100px;
+            width:100px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background:#34a853 ;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #2d6a4f;
+        }
+
+        header {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #0f3f1c;
+            color: #fff;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        p {
+            margin: 0.5rem 0 0;
+            font-size: 1.2rem;
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 2rem;
+        }
+
+        .event {
+            background: #e6f5ea;
+            border: 2px solid #2d6a4f;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .event h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: #184e3a;
+        }
+
+        .event p {
+            font-size: 1.1rem;
+            color: #184e3a;
+        }
+
+        .event:hover {
+            transform: scale(1.05);
+            background: #34a853;
+            color: #fff;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal h2 {
+            color: #184e3a;
+        }
+
+        .modal p {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #184e3a;
+            color: #fff;
+            width: 100%;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img id='hlo' src="https://seekvectors.com/storage/images/lpu-logo-01.jpg">
+        <h1>Environmental Calendar</h1>
+        <h2>Showing Important Dates Related to Environment</h2>
+        <p>Highlighting important environmental dates around the world , celebrated for producing awareness of protecting nature  </p>
+
+    </header>
+    
+    <div class="calendar-container" id="calendar">
+        <!-- Events will be dynamically added here -->
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeBtn">&times;</span>
+            <h2 id="modalTitle">Event Title</h2>
+            <p id="modalDate">Date</p>
+            <p id="modalDescription">Description</p>
+            <p id="modalDetails">More details about this event will appear here.</p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Environmental Awareness </p>
+        
+    </footer>
+
+    <script>
+        // JavaScript
+        const events = [
+            { 
+                name: "World Wetlands Day", 
+                date: "February 2", 
+                description: "Celebrating the importance of wetlands.",
+                details: "World Wetlands Day aims to raise global awareness about the vital role of wetlands for people and our planet. Wetlands cover about 6% of the Earth's surface and provide essential functions such as water purification, water storage, and shoreline stability."
+            },
+            { 
+                name: "Earth Hour", 
+                date: "Last Saturday of March", 
+                description: "A worldwide movement to turn off lights and raise awareness about climate change.",
+                details: "Organized by the World Wide Fund for Nature (WWF), Earth Hour is a symbolic 'lights out' event that encourages individuals, communities, and businesses to turn off non-essential electric lights for one hour to raise awareness about energy consumption and its impact on the planet."
+            },
+            { 
+                name: "Earth Day", 
+                date: "April 22", 
+                description: "A global day for environmental protection.",
+                details: "Earth Day is an annual event to demonstrate support for environmental protection. First held in 1970, it now includes events coordinated globally by the Earth Day Network in more than 193 countries."
+            },
+            { 
+                name: "World Environment Day", 
+                date: "June 5", 
+                description: "The UN's principal day for encouraging worldwide awareness and action to protect our environment.",
+                details: "World Environment Day is celebrated to encourage awareness and action for the protection of the environment. It was established by the United Nations General Assembly in 1972 and is hosted by different countries each year."
+            },
+            { 
+                name: "World Oceans Day", 
+                date: "June 8", 
+                description: "Celebrating the oceans and raising awareness of the need to protect them.",
+                details: "World Oceans Day is an annual global event held to celebrate and honor the oceans. It aims to raise awareness about the critical importance of the oceans and the threats they face due to pollution, overfishing, and climate change."
+            },
+            { 
+                name: "International Day for the Preservation of the Ozone Layer", 
+                date: "September 16", 
+                description: "A reminder of the importance of protecting the ozone layer.",
+                details: "The International Day for the Preservation of the Ozone Layer celebrates the signing of the Montreal Protocol, which aims to protect the ozone layer by phasing out substances that deplete it. The day highlights the importance of preserving the ozone for future generations."
+            },
+            { 
+                name: "World Habitat Day", 
+                date: "First Monday of October", 
+                description: "Reflecting on the state of our habitats and the basic right to adequate shelter.",
+                details: "World Habitat Day is a United Nations observance that raises awareness about the global need for sustainable urban development. It also highlights the importance of creating a world where all people have access to adequate housing and live in safe environments."
+            },
+            { 
+                name: "International Day of Climate Action", 
+                date: "October 24", 
+                description: "Promoting action to combat climate change.",
+                details: "The International Day of Climate Action encourages people to take action against climate change by raising awareness and advocating for policies to reduce greenhouse gas emissions. It is part of the global movement to protect the environment and promote sustainability."
+            },
+            { 
+                name: "World Soil Day", 
+                date: "December 5", 
+                description: "Raising awareness about the importance of soil health.",
+                details: "World Soil Day focuses on the importance of healthy soils for food production and ecosystem services. It aims to raise awareness about soil degradation and the need for sustainable land management practices to protect soil resources."
+            },
+            { 
+                name: "World Water Day", 
+                date: "March 22", 
+                description: "Focusing attention on the importance of freshwater.",
+                details: "World Water Day is celebrated to raise awareness about the importance of water conservation and sustainable water management. It aims to inspire actions to address the global water crisis and promote the sustainable use of freshwater resources."
+            },
+            { 
+                name: "International Forest Day", 
+                date: "March 21", 
+                description: "Promoting the importance of forests for the health of our planet.",
+                details: "International Forest Day is celebrated to highlight the critical role forests play in supporting biodiversity, combating climate change, and providing essential resources like clean air and water. The day promotes sustainable forest management practices."
+            },
+            { 
+                name: "World Bee Day", 
+                date: "May 20", 
+                description: "Raising awareness of the importance of bees for biodiversity.",
+                details: "World Bee Day aims to raise awareness about the vital role bees play in pollination, which is critical for food production and maintaining biodiversity. The day also emphasizes the need to protect bee populations worldwide."
+            },
+            { 
+                name: "International Day for Biological Diversity", 
+                date: "May 22", 
+                description: "Celebrating and raising awareness about biodiversity.",
+                details: "This day aims to increase understanding and awareness of biodiversity issues and encourage actions to protect species and ecosystems. It celebrates the richness of the world's biological diversity and the need for its conservation."
+            }
+        ];
+
+        // Function to populate the calendar with events
+        const calendarContainer = document.getElementById("calendar");
+        events.forEach(event => {
+            const eventDiv = document.createElement("div");
+            eventDiv.classList.add("event");
+
+            const eventTitle = document.createElement("h2");
+            eventTitle.textContent = event.name;
+
+            const eventDate = document.createElement("p");
+            eventDate.textContent =` Date: ${event.date}`;
+
+            const eventDescription = document.createElement("p");
+            eventDescription.textContent = event.description;
+
+            eventDiv.appendChild(eventTitle);
+            eventDiv.appendChild(eventDate);
+            eventDiv.appendChild(eventDescription);
+
+            // Add event listener for modal
+            eventDiv.addEventListener("click", () => {
+                openModal(event);
+            });
+
+            calendarContainer.appendChild(eventDiv);
+        });
+
+        // Modal functionality
+        const modal = document.getElementById("eventModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDate = document.getElementById("modalDate");
+        const modalDescription = document.getElementById("modalDescription");
+        const modalDetails = document.getElementById("modalDetails");
+        const closeBtn = document.getElementById("closeBtn");
+
+        function openModal(event) {
+            modalTitle.textContent = event.name;
+            modalDate.textContent = `Date: ${event.date}`;
+            modalDescription.textContent = event.description;
+            modalDetails.textContent = event.details;
+            modal.style.display = "flex";
+        }
+
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
